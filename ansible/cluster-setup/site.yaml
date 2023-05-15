@@ -312,7 +312,15 @@
                     timeout: { minutes: 3 }
             locations:
               - type: url
-                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates/blob/main/scaffolder-templates/quarkus-web-template/template.yaml
+                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates/blob/master/scaffolder-templates/poi-map/template.yaml
+                rules:
+                  - allow: [Template]
+              - type: url
+                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates/blob/master/scaffolder-templates/poi-gateway/template.yaml
+                rules:
+                  - allow: [Template]
+              - type: url
+                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates/blob/master/scaffolder-templates/poi-backend/template.yaml
                 rules:
                   - allow: [Template]
         oauth:
