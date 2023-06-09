@@ -358,3 +358,54 @@
         techdocs:
           enabled: true
       create_namespace: true
+- name: Install Console links
+  hosts: 'localhost'
+  tasks:
+  - name: Install Console link to Workshop Instructions
+    with_items: "{{ env }}"
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: console.openshift.io/v1
+        kind: ConsoleLink
+        metadata:
+          name: application-menu-content
+        spec:
+          href: 'https://redhat-scholars.github.io/backstage-workshop'
+          location: ApplicationMenu
+          text: Workshop Instructions
+          applicationMenu:
+            section: Workshop Resources
+            imageURL: https://yt3.ggpht.com/ytc/AKedOLRI9AQ_w5yyklg6BhPexpyq9ZPbAXZnXTnzEcyx5Q=s88-c-k-c0x00ffffff-no-rj
+  - name: Install Console link to Backstage
+    with_items: "{{ env }}"
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: console.openshift.io/v1
+        kind: ConsoleLink
+        metadata:
+          name: application-menu-backstage
+        spec:
+          href: "https://janus-demo.apps{{ cluster_host }}"
+          location: ApplicationMenu
+          text: Backstage
+          applicationMenu:
+            section: Workshop Resources
+            imageURL: https://janus-idp.io/images/favicon/favicon.ico
+  - name: Install Console link to GitHub Org
+    with_items: "{{ env }}"
+    kubernetes.core.k8s:
+      state: present
+      definition:
+        apiVersion: console.openshift.io/v1
+        kind: ConsoleLink
+        metadata:
+          name: application-menu-github
+        spec:
+          href: "https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}"
+          location: ApplicationMenu
+          text: "{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}"
+          applicationMenu:
+            section: Workshop Resources
+            imageURL: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
