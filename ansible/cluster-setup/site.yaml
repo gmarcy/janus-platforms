@@ -389,10 +389,10 @@
         spec:
           href: "https://janus-demo.apps{{ cluster_host }}"
           location: ApplicationMenu
-          text: Backstage
+          text: Red Hat Developer Hub
           applicationMenu:
             section: Workshop Resources
-            imageURL: https://janus-idp.io/images/favicon/favicon.ico
+            imageURL: https://console-openshift-console.apps{{ cluster_host }}/static/assets/redhat.svg
   - name: Install Console link to GitHub Org
     with_items: "{{ env }}"
     kubernetes.core.k8s:
