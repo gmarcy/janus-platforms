@@ -20,6 +20,7 @@
       namespace: "openshift-operators"
       chart_ref: ../../charts/operator
       values_files: ["../../charts/operator/values-certmanager-operator.yaml"]
+      force: true
 - name: Install Vault Operator Chart.
   hosts: 'localhost'
   tasks:
@@ -32,6 +33,28 @@
     until: cm_crd.api_found == true
     retries: 40
     delay: 5
+  - name: Wait for cert-manager
+    kubernetes.core.k8s_info:
+      api_version: apps/v1
+      kind: Deployment
+      name: cert-manager
+      namespace: "openshift-operators"
+      wait: true
+      wait_condition:
+        type: Available
+      wait_sleep: 20
+      wait_timeout: 300
+  - name: Wait for cert-manager-webhook
+    kubernetes.core.k8s_info:
+      api_version: apps/v1
+      kind: Deployment
+      name: cert-manager-webhook
+      namespace: "openshift-operators"
+      wait: true
+      wait_condition:
+        type: Available
+      wait_sleep: 20
+      wait_timeout: 300
   - name: Pause until Cert Manager is Ready
     pause:
       seconds: 10
@@ -305,12 +328,15 @@
       github_private_key: "{{ github_private_key_rsp.results[0].stdout }}"
   - name: Run Backstage Helm Chart
     with_items: "{{ env }}"
-    kubernetes.core.helm:
-      state: present
+    kubernetes.core.helm_template:
+      #state: present
+      output_dir: /tmp/template_output
       name: "{{ item.janusinstancename }}"
-      namespace: "{{ item.namespace }}"
+      #namespace: "{{ item.namespace }}"
       chart_ref: ../../charts/janus-backstage
       values:
+        image:
+          tag: "0.2.0"
         rhsso:
           baseUrl: "https://keycloak-{{ item.namespace }}.apps{{ cluster_host }}/auth"
           clientId: "backstage"
@@ -331,15 +357,15 @@
                     timeout: { minutes: 3 }
             locations:
               - type: url
-                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates/blob/master/scaffolder-templates/poi-map/template.yaml
+                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/backstage-workshop/blob/master/scaffolder-templates/poi-map/template.yaml
                 rules:
                   - allow: [Template]
               - type: url
-                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates/blob/master/scaffolder-templates/poi-gateway/template.yaml
+                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/backstage-workshop/blob/master/scaffolder-templates/poi-gateway/template.yaml
                 rules:
                   - allow: [Template]
               - type: url
-                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates/blob/master/scaffolder-templates/poi-backend/template.yaml
+                target: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/backstage-workshop/blob/master/scaffolder-templates/poi-backend/template.yaml
                 rules:
                   - allow: [Template]
         oauth:

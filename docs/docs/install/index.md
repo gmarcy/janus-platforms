@@ -179,18 +179,18 @@ export JANUS_QUAY_TOKEN=
 ```
 ## Install
 
-Clone the `demo-setup` repo and run the next commands from inside of the `ansible/cluster-setup` directory
+Clone the `janus-platforms` repo and run the next commands from inside of the `ansible/cluster-setup` directory
 
 ```sh
-git clone https://github.com/janus-idp/demo-setup.git
-cd demo-setup/ansible/cluster-setup
+git clone https://github.com/gmarcy/janus-platforms.git
+cd janus-platforms/ansible/cluster-setup
 ```
 
-### Run the Software Templates Setup Playbook
+### Run the Backstage Workshop Setup Playbook
 
-Fork the [Software Templates](https://github.com/janus-idp/software-templates/fork) repository to your organization. Ensure that the name of the forked repo remains as `software-templates`
+Fork the [Backstage Workshop](https://github.com/redhat-scholars/backstage-workshop/fork) repository to your organization. Ensure that the name of the forked repo remains as `backstage-workshop`
 
-Execute the following command to complete setup of the fork. This playbook will customize your fork of the Software Templates repo with relevant information pertaining to your cluster, and mimic the structure of a custom template being used in an enterprise IT environment.
+Execute the following command to complete setup of the fork. This playbook will customize your fork of the Backstage Workshop repo with relevant information pertaining to your cluster, and mimic the structure of a custom template being used in an enterprise IT environment.
 
 ```sh
 ansible-playbook ./template.yaml
@@ -209,7 +209,7 @@ ansible-playbook site.yaml -i inventory
 !!! note
     The deployment of most infrastructure is delegated to ArgoCD.  Once the playbook successfully runs, it may take several minutes until the demo is fully operational. The deployment can be monitored in the ArgoCD console.
 
-The cluster is now set up to run the Janus IDP Demo. Please refer to the [Architecture](../architecture/) and [Demo](../demo/) sections for further guidance. 
+The cluster is now set up to run the Janus IDP Demo. Please refer to the [Architecture](../architecture/) and [Demo](../demo/) sections for further guidance.
 
 To create a local copy of the requisite environment variables for future use, run the following command:
 
@@ -262,8 +262,8 @@ Update all OAuth apps created in the Configuration section above with the new cl
 
 ![OAuth Apps](assets/existing-org-oauth.png)
 
-### Update Software Templates
-Make sure your `$GITHUB_ORGANIZATION/software-templates` repository is up-to-date to ensure you get the latest features in the templates.  To do this, either hit the "Sync fork" button, delete and re-clone the repo as described in the first step [here](#run-the-software-templates-setup-playbook) or run the following commands:
+### Update Backstage Workshop
+Make sure your `$GITHUB_ORGANIZATION/backstage-workshop` repository is up-to-date to ensure you get the latest features in the templates.  To do this, either hit the "Sync fork" button, delete and re-clone the repo as described in the first step [here](#run-the-backstage-workshop-setup-playbook) or run the following commands:
 
 ```bash
 git fetch upstream
@@ -274,7 +274,7 @@ git merge upstream/main
 ```
 
 ### Run Ansible Playbooks
-Run both playbooks as described in the [`Run the Software Templates Setup Playbook`](#run-the-software-templates-setup-playbook) and [`Run the Cluster Setup Playbook`](#run-the-cluster-setup-playbook) sections above
+Run both playbooks as described in the [`Run the Backstage Workshop Setup Playbook`](#run-the-backstage-workshop-setup-playbook) and [`Run the Cluster Setup Playbook`](#run-the-cluster-setup-playbook) sections above
 
 ### Clone the XXX-gitops repo(s)
 1. Clone your `-gitops` repo.

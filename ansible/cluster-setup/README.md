@@ -115,7 +115,7 @@ Create a **second** GitHub OAuth application to enable Dev Spaces to seamlessly 
 open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-dev-spaces&oauth_application[url]=https://devspaces.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://devspaces.apps$OPENSHIFT_CLUSTER_INFO/api/oauth/callback"
 ```
 
-Set the `GITHUB_DEV_SPACES_CLIENT_ID` and `GITHUB_DEV_SPACES_CLIENT_SECRET` environment variables will the values from the OAuth application.
+Set the `GITHUB_DEV_SPACES_CLIENT_ID` and `GITHUB_DEV_SPACES_CLIENT_SECRET` environment variables with the values from the OAuth application.
 
 ``` sh
 export GITHUB_DEV_SPACES_CLIENT_ID=
@@ -131,7 +131,7 @@ Create a **third** GitHub OAuth application to enable the numerous Backstage plu
 open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-backstage&oauth_application[url]=https://janus-demo.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://janus-demo.apps$OPENSHIFT_CLUSTER_INFO/api/auth/github/handler/frame"
 ```
 
-Set the `GITHUB_BACKSTAGE_CLIENT_ID` and `GITHUB_BACKSTAGE_CLIENT_SECRET` environment variables will the values from the OAuth application.
+Set the `GITHUB_BACKSTAGE_CLIENT_ID` and `GITHUB_BACKSTAGE_CLIENT_SECRET` environment variables with the values from the OAuth application.
 
 ``` sh
 export GITHUB_BACKSTAGE_CLIENT_ID=
@@ -142,18 +142,18 @@ export GITHUB_BACKSTAGE_CLIENT_SECRET=
 ```
 ## Install
 
-Clone the `demo-setup` repo and run the next commands from inside of the `ansible/cluster-setup` directory
+Clone the `janus-platforms` repo and run the next commands from inside of the `ansible/cluster-setup` directory
 
 ```sh
-git clone https://github.com/janus-idp/demo-setup.git
-cd demo-setup/ansible/cluster-setup
+git clone https://github.com/gmarcy/janus-platforms.git
+cd janus-platforms/ansible/cluster-setup
 ```
 
-### Run the Software Templates Setup Playbook
+### Run the Backstage Workshop Setup Playbook
 
-Fork the [Software Templates](https://github.com/janus-idp/software-templates/fork) repository to your organization. Ensure that the name of the forked repo remains as `software-templates`
+Fork the [Backstage Workshop](https://github.com/redhat-scholars/backstage-workshop/fork) repository to your organization. Ensure that the name of the forked repo remains as `backstage-workshop`
 
-Execute the following command to complete setup of the fork. This playbook will customize your fork of the Software Templates repo with relevant information pertaining to your cluster, and mimic the structure of a custom template being used in an enterprise IT environment.
+Execute the following command to complete setup of the fork. This playbook will customize your fork of the Backstage Workshop repo with relevant information pertaining to your cluster, and mimic the structure of a custom template being used in an enterprise IT environment.
 
 ```sh
 ansible-playbook ./template.yaml
@@ -171,7 +171,7 @@ ansible-playbook site.yaml -i inventory
 
 > **_NOTE:_** The deployment of most infrastructure is delegated to ArgoCD.  Once the playbook successfully runs, it may take several minutes until the demo is fully operational. The deployment can be monitored in the ArgoCD console.
 
-The cluster is now set up to run the Janus IDP Demo.  Please refer to the [Architecture](https://janus-idp.io/demo-setup/architecture/) and [Demo](https://janus-idp.io/demo-setup/demo/) sections for further guidance. 
+The cluster is now set up to run the Janus IDP Demo.  Please refer to the [Architecture](https://janus-idp.io/janus-platforms/architecture/) and [Demo](https://janus-idp.io/janus-platforms/demo/) sections for further guidance .
 
 
 To create a local copy of the requisite environment variables for future use, run the following command:

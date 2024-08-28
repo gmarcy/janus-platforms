@@ -8,5 +8,5 @@ env:
   vaultnamespace: "vault"
   gitwebhooknamespace: "gitwebhook-operator"
   janusinstancename: "janus-dev"
-  githubinfraorganization: "janus-idp"
-  githubinfrarevision: "main"
+  githubinfraorganization: "gmarcy"
+  githubinfrarevision: "my-workshop"

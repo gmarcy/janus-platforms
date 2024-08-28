@@ -35,9 +35,15 @@ backstage:
       rules:
         - allow: [Component, System, API, Resource, Location, Template]
       locations:
-        # Add reference to sample template
+        # Add reference to poi-backend template
         - type: url
-          target: https://github.com/janus-idp/software-templates/blob/main/scaffolder-templates/quarkus-web-template/template.yaml
+          target: https://github.com/gmarcy/backstage-workshop/blob/master/scaffolder-templates/poi-backend/template.yaml
+        # Add reference to poi-gateway template
+        - type: url
+          target: https://github.com/gmarcy/backstage-workshop/blob/master/scaffolder-templates/poi-gateway/template.yaml
+        # Add reference to poi-map template
+        - type: url
+          target: https://github.com/gmarcy/backstage-workshop/blob/master/scaffolder-templates/poi-map/template.yaml
   
 
 github:

@@ -16,26 +16,26 @@
   tasks:
   - name: Reset Local
     ansible.builtin.file:
-      path: ../../../software-templates
+      path: ../../../backstage-workshop
       state: absent
-  - name: Clone the Fork of software-templates
+  - name: Clone the Fork of backstage-workshop
     block:
-      - name: Clone the Fork of software-templates using SSH
+      - name: Clone the Fork of backstage-workshop using SSH
         ansible.builtin.git:
-          repo: git@github.com:{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates.git
-          dest: ../../../software-templates
+          repo: git@github.com:{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/backstage-workshop.git
+          dest: ../../../backstage-workshop
         environment:
           GIT_TERMINAL_PROMPT: 0
     rescue:
-      - name: Retry Clone the Fork of software-templates using HTTPS
+      - name: Retry Clone the Fork of backstage-workshop using HTTPS
         ansible.builtin.git:
-          repo: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/software-templates.git
-          dest: ../../../software-templates
+          repo: https://github.com/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/backstage-workshop.git
+          dest: ../../../backstage-workshop
         environment:
           GIT_TERMINAL_PROMPT: 0
   - name: Insert Cluster Information
     shell: |
-      cd ../../../software-templates
+      cd ../../../backstage-workshop
       sed "s/Summit23DevLab/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/" ./scaffolder-templates/poi-map/template.yaml > output.txt && mv output.txt ./scaffolder-templates/poi-map/template.yaml
       sed "s/Summit23DevLab/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/" ./scaffolder-templates/poi-gateway/template.yaml > output.txt && mv output.txt ./scaffolder-templates/poi-gateway/template.yaml
       sed "s/Summit23DevLab/{{ lookup('ansible.builtin.env', 'GITHUB_ORGANIZATION') }}/" ./scaffolder-templates/poi-backend/template.yaml > output.txt && mv output.txt ./scaffolder-templates/poi-backend/template.yaml
