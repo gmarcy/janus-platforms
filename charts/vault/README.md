@@ -10,18 +10,18 @@ The `values.yaml` file in the folder charts/vault folder needs to be modified fo
 ```bash
 cp charts/vault/values.yaml my-values.yaml
 ```
-2) Update the namespace place holder with the target namespace, i.e 'janus'.
+2) Update the namespace place holder with the target namespace, i.e 'rhdh'.
 ```bash
-sed -i 's/<namespace_replace>/janus/g' ./my-values.yaml
+sed -i 's/<namespace_replace>/rhdh/g' ./my-values.yaml
 ```
 3) Create or verify using target project
 ```
-oc new-project janus
+oc new-project rhdh
 ```
 
 4) Install via Helm
 ```bach
-helm upgrade -n janus -u vault --set base_domain=$(oc get dns cluster -o jsonpath='{ .spec.baseDomain }' --values ./my-values.yaml ./charts/vault
+helm upgrade -n rhdh -u vault --set base_domain=$(oc get dns cluster -o jsonpath='{ .spec.baseDomain }' --values ./my-values.yaml ./charts/vault
 ```
 
 ## Post installation verification
@@ -75,5 +75,5 @@ The [values.yml](values.yaml) contains examples of additional plugins for the va
 
 To delete the chart:
 ```bash
-helm uninstall vault -n janus
+helm uninstall vault -n rhdh
 ```

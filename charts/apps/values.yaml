@@ -1,5 +1,5 @@
 git:
   applicationId: bar
-  infraOrgName: janus-idp
-  infraRevision: main
+  infraOrgName: gmarcy
+  infraRevision: workshop
   

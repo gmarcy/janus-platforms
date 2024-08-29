@@ -1,3 +1,3 @@
 # Architecture
 
-![Architecture](assets/janus-architecture.png)
+![Architecture](assets/rhdh-architecture.png)

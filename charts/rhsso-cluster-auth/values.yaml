@@ -26,5 +26,5 @@ openshift:
 patches:
   apply: true
 
-janus:
-  group: janus
+rhdh:
+  group: rhdh

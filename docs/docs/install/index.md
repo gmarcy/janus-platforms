@@ -1,7 +1,7 @@
 # Getting Started
 
 !!! note
-    This demo was developed with the [Janus IDP Demo](https://demo.redhat.com/catalog?search=janus&item=babylon-catalog-prod%2Fcommunity-content.com-janus-idp.prod) catalog item on the Red Hat Demo Platform as the intended target for deployment.  Though not supported, the full setup and demo should work on any OpenShift 4.12+ cluster.
+    This demo was developed with the [RHDH IDP Demo](https://demo.redhat.com/catalog?search=rhdh&item=babylon-catalog-prod%2Fcommunity-content.com-rhdh-idp.prod) catalog item on the Red Hat Demo Platform as the intended target for deployment.  Though not supported, the full setup and demo should work on any OpenShift 4.12+ cluster.
 
 ## Instructional Video
 
@@ -70,7 +70,7 @@ export GITHUB_ORGANIZATION=
 1. Create a new GitHub Application to use the `Git WebHooks` functionality in this demo.  The required field will be populated, and correct permissions set.
 
     ``` sh
-    open "https://github.com/organizations/$GITHUB_ORGANIZATION/settings/apps/new?name=$GITHUB_ORGANIZATION-webhook&url=https://janus-idp.io/blog&webhook_active=false&public=false&administration=write&checks=write&actions=write&contents=write&statuses=write&vulnerability_alerts=write&dependabot_secrets=write&deployments=write&discussions=write&environments=write&issues=write&packages=write&pages=write&pull_requests=write&repository_hooks=write&repository_projects=write&secret_scanning_alerts=write&secrets=write&security_events=write&workflows=write&webhooks=write"
+    open "https://github.com/organizations/$GITHUB_ORGANIZATION/settings/apps/new?name=$GITHUB_ORGANIZATION-webhook&url=https://rhdh-idp.io/blog&webhook_active=false&public=false&administration=write&checks=write&actions=write&contents=write&statuses=write&vulnerability_alerts=write&dependabot_secrets=write&deployments=write&discussions=write&environments=write&issues=write&packages=write&pages=write&pull_requests=write&repository_hooks=write&repository_projects=write&secret_scanning_alerts=write&secrets=write&security_events=write&workflows=write&webhooks=write"
     ```
 
 1. Set the `GITHUB_APP_ID` and `GITHUB_APP_CLIENT_ID` environment variables to the App ID  and App Client ID, respectively. Generate a new client secret and set the `GITHUB_APP_CLIENT_SECRET` environment variable.  Then, generate a `Private Key` for this app and **download** the private key file.  Set the `GITHUB_KEY_FILE` environment variable to the downloaded file, using either the absolute path or the path relative to the `ansible/cluster-setup` directory.
@@ -98,7 +98,7 @@ export GITHUB_ORGANIZATION=
 Create an GitHub OAuth application in order to use GitHub as an Identity Provider for Backstage.
 
 ``` sh
-open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-identity-provider&oauth_application[url]=https://janus-demo.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://keycloak-backstage.apps$OPENSHIFT_CLUSTER_INFO/auth/realms/backstage/broker/github/endpoint"
+open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-identity-provider&oauth_application[url]=https://rhdh-demo.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://keycloak-backstage.apps$OPENSHIFT_CLUSTER_INFO/auth/realms/backstage/broker/github/endpoint"
 ```
 
 Set the `GITHUB_KEYCLOAK_CLIENT_ID` and `GITHUB_KEYCLOAK_CLIENT_SECRET` environment variables with the values from the OAuth application.
@@ -132,7 +132,7 @@ export GITHUB_DEV_SPACES_CLIENT_SECRET=
 Create a **third** GitHub OAuth application to enable the numerous Backstage plugins utilizing GitHub to authenticate and access the relevant data.
 
 ``` sh
-open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-backstage&oauth_application[url]=https://janus-demo.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://janus-demo.apps$OPENSHIFT_CLUSTER_INFO/api/auth/github/handler/frame"
+open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-backstage&oauth_application[url]=https://rhdh-demo.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://rhdh-demo.apps$OPENSHIFT_CLUSTER_INFO/api/auth/github/handler/frame"
 ```
 
 Set the `GITHUB_BACKSTAGE_CLIENT_ID` and `GITHUB_BACKSTAGE_CLIENT_SECRET` environment variables with the values from the OAuth application.
@@ -167,28 +167,28 @@ Under `Repository Settings -> User and Robot Permissions`, create a new robot ac
 
 ![Add Permission](assets/quay-permission.png)
 
-Set the `JANUS_QUAY_USER` and `JANUS_QUAY_TOKEN` environment variables to the username and token of the robot account.
+Set the `RHDH_QUAY_USER` and `RHDH_QUAY_TOKEN` environment variables to the username and token of the robot account.
 
 
 ``` sh
-export JANUS_QUAY_USER=
+export RHDH_QUAY_USER=
 ```
 
 ``` sh
-export JANUS_QUAY_TOKEN=
+export RHDH_QUAY_TOKEN=
 ```
 ## Install
 
-Clone the `demo-setup` repo and run the next commands from inside of the `ansible/cluster-setup` directory
+Clone the `rhdh-platforms` repo and run the next commands from inside of the `ansible/cluster-setup` directory
 
 ```sh
-git clone https://github.com/janus-idp/demo-setup.git
-cd demo-setup/ansible/cluster-setup
+git clone https://github.com/gmarcy/rhdh-platforms.git
+cd rhdh-platforms/ansible/cluster-setup
 ```
 
 ### Run the Software Templates Setup Playbook
 
-Fork the [Software Templates](https://github.com/janus-idp/software-templates/fork) repository to your organization. Ensure that the name of the forked repo remains as `software-templates`
+Fork the [Software Templates](https://github.com/gmarcy/backstage-workshop/fork) repository to your organization and change the name of the forked repo to `software-templates`
 
 Execute the following command to complete setup of the fork. This playbook will customize your fork of the Software Templates repo with relevant information pertaining to your cluster, and mimic the structure of a custom template being used in an enterprise IT environment.
 
@@ -209,7 +209,7 @@ ansible-playbook site.yaml -i inventory
 !!! note
     The deployment of most infrastructure is delegated to ArgoCD.  Once the playbook successfully runs, it may take several minutes until the demo is fully operational. The deployment can be monitored in the ArgoCD console.
 
-The cluster is now set up to run the Janus IDP Demo. Please refer to the [Architecture](../architecture/) and [Demo](../demo/) sections for further guidance. 
+The cluster is now set up to run the RHDH IDP Demo. Please refer to the [Architecture](../architecture/) and [Demo](../demo/) sections for further guidance.
 
 To create a local copy of the requisite environment variables for future use, run the following command:
 
@@ -252,7 +252,7 @@ export GITHUB_BACKSTAGE_CLIENT_SECRET=$GITHUB_BACKSTAGE_CLIENT_SECRET" > env.sh
     open "https://console-openshift-console.apps$OPENSHIFT_CLUSTER_INFO/command-line-tools"
     ```
 ## Setup for Previously Run Demo
-If you previously run a demo and want to use the same GitHub Organization and repostiories you can.  Janus will discover previous repositories and automatically add them to the catalog.  In order to create the Argo CD resources, OpenShift namespaces and Tekton pipelines, follow the steps below:
+If you previously run a demo and want to use the same GitHub Organization and repostiories you can.  RHDH will discover previous repositories and automatically add them to the catalog.  In order to create the Argo CD resources, OpenShift namespaces and Tekton pipelines, follow the steps below:
 
 ### Set your Environment Variables
 Make sure properly set all your environment variables as described in the Configuration section above.  This includes the setting of the `OPENSHIFT_CLUSTER_INFO`

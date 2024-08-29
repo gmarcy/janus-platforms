@@ -31,7 +31,7 @@ subjects:
 - kind: ServiceAccount
   name: default
   #namespace: {{ .Release.Namespace  }}
-  namespace: janus
+  namespace: rhdh
 ---
 apiVersion: v1
 kind: Pod

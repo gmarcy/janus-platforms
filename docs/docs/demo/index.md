@@ -1,4 +1,4 @@
-# Janus IDP Demo
+# RHDH IDP Demo
 
 ## Instructions
 

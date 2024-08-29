@@ -7,7 +7,7 @@ The Openshift Pipelines Helm Chart customizes and deploys the [RedHat Openshift 
 To install the chart from source:
 ```bash
 # within this directory 
-helm upgrade --install pipelines . -f values.yaml -n janus-pipelines --create-namespace
+helm upgrade --install pipelines . -f values.yaml -n rhdh-pipelines --create-namespace
 ```
 To install using oc apply
 ```bash
@@ -37,7 +37,7 @@ operator:
 
 To delete the chart:
 ```bash
-helm uninstall pipelines --namespace janus-pipelines
+helm uninstall pipelines --namespace rhdh-pipelines
 ```
 
 To delete when not using helm

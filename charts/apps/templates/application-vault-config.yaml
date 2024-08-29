@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: janus-vault-config
+  name: rhdh-vault-config
   finalizers:
   - resources-finalizer.argocd.argoproj.io  
 spec:
   project: default
   source:
-    repoURL: https://github.com/{{ .Values.git.infraOrgName }}/demo-setup.git
+    repoURL: https://github.com/{{ .Values.git.infraOrgName }}/rhdh-platforms.git
     targetRevision: {{ .Values.git.infraRevision }}
     path: charts/vault-config
     helm:

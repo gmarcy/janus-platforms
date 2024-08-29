@@ -1,6 +1,6 @@
 # Helm Charts
 
-This folder contains helm charts that can be used to setup supporting applications used by the janus platform.  
+This folder contains helm charts that can be used to setup supporting applications used by the rhdh platform.
 
 ## Installing components using helm
 
@@ -14,6 +14,6 @@ helm install my-gitops -f my-values.yaml charts/gitops-operator
 For more info on each chart checkout these!
 * [gitops-operator](/charts/gitops-operator)
 * [pipelines-operator](/charts/pipelines-operator)
-* [janus-backstage](/charts/janus-backstage)
+* [rhdh-backstage](/charts/rhdh-backstage)
 * [rhsso-backstage](/charts/rhsso-backstage)
 * [rhsso-cluster-auth](/charts/rhsso-cluster-auth)

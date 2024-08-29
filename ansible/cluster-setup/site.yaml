@@ -20,6 +20,7 @@
       namespace: "openshift-operators"
       chart_ref: ../../charts/operator
       values_files: ["../../charts/operator/values-certmanager-operator.yaml"]
+      force: true
 - name: Install Vault Operator Chart.
   hosts: 'localhost'
   tasks:
@@ -32,6 +33,28 @@
     until: cm_crd.api_found == true
     retries: 40
     delay: 5
+  - name: Wait for cert-manager
+    kubernetes.core.k8s_info:
+      api_version: apps/v1
+      kind: Deployment
+      name: cert-manager
+      namespace: "openshift-operators"
+      wait: true
+      wait_condition:
+        type: Available
+      wait_sleep: 20
+      wait_timeout: 300
+  - name: Wait for cert-manager-webhook
+    kubernetes.core.k8s_info:
+      api_version: apps/v1
+      kind: Deployment
+      name: cert-manager-webhook
+      namespace: "openshift-operators"
+      wait: true
+      wait_condition:
+        type: Available
+      wait_sleep: 20
+      wait_timeout: 300
   - name: Pause until Cert Manager is Ready
     pause:
       seconds: 10
@@ -75,7 +98,7 @@
     with_items: "{{ env }}"
     community.hashi_vault.vault_write:
       url: "https://vault-vault.apps{{ cluster_host }}"
-      path: kv/{{ item.janusinstancename }}/dev-spaces
+      path: kv/{{ item.rhdhinstancename }}/dev-spaces
       validate_certs: false
       data:
         id: "{{ lookup('ansible.builtin.env', 'GITHUB_DEV_SPACES_CLIENT_ID') }}"
@@ -86,7 +109,7 @@
     with_items: "{{ env }}"
     community.hashi_vault.vault_write:
       url: "https://vault-vault.apps{{ cluster_host }}"
-      path: kv/{{ item.janusinstancename }}/github-plugin
+      path: kv/{{ item.rhdhinstancename }}/github-plugin
       validate_certs: false
       data:
         app_id: "{{ lookup('ansible.builtin.env', 'GITHUB_APP_ID') }}"
@@ -96,7 +119,7 @@
   - name: Concatenate Registry Credentials
     with_items: "{{ env }}"
     set_fact:
-      registry_credentials: "{{ lookup('ansible.builtin.env', 'JANUS_QUAY_USER') }}:{{ lookup('ansible.builtin.env', 'JANUS_QUAY_TOKEN') }}"
+      registry_credentials: "{{ lookup('ansible.builtin.env', 'RHDH_QUAY_USER') }}:{{ lookup('ansible.builtin.env', 'RHDH_QUAY_TOKEN') }}"
   - name: Encode Registry Credentials
     with_items: "{{ env }}"
     set_fact:
@@ -105,12 +128,12 @@
     with_items: "{{ env }}"
     community.hashi_vault.vault_write:
       url: "https://vault-vault.apps{{ cluster_host }}"
-      path: kv/{{ item.janusinstancename }}/registry
+      path: kv/{{ item.rhdhinstancename }}/registry
       validate_certs: false
       data:
         credentials: "{{ encoded_registry_credentials }}"
-        user: "{{ lookup('ansible.builtin.env', 'JANUS_QUAY_USER') }}"
-        token: "{{ lookup('ansible.builtin.env', 'JANUS_QUAY_TOKEN') }}"
+        user: "{{ lookup('ansible.builtin.env', 'RHDH_QUAY_USER') }}"
+        token: "{{ lookup('ansible.builtin.env', 'RHDH_QUAY_TOKEN') }}"
       token: "{{ vault_token }}"
 - name: Install and Configure GitOps.
   hosts: 'localhost'
@@ -124,11 +147,11 @@
       chart_ref: ../../charts/gitops-operator
       values:
         namespaces:
-          - janus-argocd
+          - rhdh-argocd
           - infra-argocd
         projects:
-          - name: janus
-            namespace: janus-argocd
+          - name: rhdh
+            namespace: rhdh-argocd
             role: automation
       create_namespace: true
   - name: Wait for ArgoCD to be Ready
@@ -151,7 +174,7 @@
       namespace: "{{ item.gitopsinfranamespace }}"
       chart_ref: ../../charts/applicationset
       values:
-        janusInstanceName: "{{ item.janusinstancename }}"
+        rhdhInstanceName: "{{ item.rhdhinstancename }}"
         git:
           applicationId: "{{ lookup('ansible.builtin.env', 'GITHUB_APP_ID') }}"
           infraOrgName: "{{ item.githubinfraorganization }}"
@@ -189,7 +212,7 @@
               clientSecret: "{{ lookup('ansible.builtin.env', 'GITHUB_KEYCLOAK_CLIENT_SECRET') }}"
               enabled: "{{ false if lookup('ansible.builtin.env', 'GITHUB_KEYCLOAK_CLIENT_SECRET') == '' else true }}"
         backstage:
-          host: "janus-demo.apps{{ cluster_host }}"
+          host: "rhdh-demo.apps{{ cluster_host }}"
       create_namespace: true
   - name: Wait for Keycloak to be Ready
     with_items: "{{ env }}"
@@ -277,7 +300,7 @@
   - name: Generate ArgoCD Automation Token
     with_items: "{{ env }}"
     uri:
-      url: "https://argocd-server-{{ item.gitopsnamespace }}.apps{{ cluster_host }}/api/v1/projects/janus/roles/automation/token"
+      url: "https://argocd-server-{{ item.gitopsnamespace }}.apps{{ cluster_host }}/api/v1/projects/rhdh/roles/automation/token"
       method: POST
       headers:
         Cookie: "argocd.token={{ argocd_admin_token }}"
@@ -305,11 +328,12 @@
       github_private_key: "{{ github_private_key_rsp.results[0].stdout }}"
   - name: Run Backstage Helm Chart
     with_items: "{{ env }}"
-    kubernetes.core.helm:
-      state: present
-      name: "{{ item.janusinstancename }}"
-      namespace: "{{ item.namespace }}"
-      chart_ref: ../../charts/janus-backstage
+    kubernetes.core.helm_template:
+      #state: present
+      output_dir: /tmp/template_output
+      name: "{{ item.rhdhinstancename }}"
+      #namespace: "{{ item.namespace }}"
+      chart_ref: https://github.com/redhat-developer/rhdh-chart/tree/main/charts/backstage
       values:
         rhsso:
           baseUrl: "https://keycloak-{{ item.namespace }}.apps{{ cluster_host }}/auth"
@@ -317,7 +341,7 @@
           clientSecret: "{{ client_secret }}"
           backstagePluginEnabled: true
         backstage:
-          baseUrl: "https://janus-demo.apps{{ cluster_host }}"
+          baseUrl: "https://rhdh-demo.apps{{ cluster_host }}"
           catalog:
             providers:
               github:
@@ -406,7 +430,7 @@
         metadata:
           name: application-menu-backstage
         spec:
-          href: "https://janus-demo.apps{{ cluster_host }}"
+          href: "https://rhdh-demo.apps{{ cluster_host }}"
           location: ApplicationMenu
           text: Red Hat Developer Hub
           applicationMenu:

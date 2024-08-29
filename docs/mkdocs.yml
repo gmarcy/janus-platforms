@@ -1,11 +1,11 @@
-site_name: Janus IDP Demo
-site_url: https://janus-idp.github.io/demo-setup/
+site_name: RHDH IDP Demo
+site_url: https://gmarcy.github.io/rhdh-platforms/
 site_description: From Idea to Production Faster
-repo_name: janus-idp/demo-setup
-repo_url: https://github.com/janus-idp/demo-setup.git
+repo_name: gmarcy/rhdh-platforms
+repo_url: https://github.com/gmarcy/rhdh-platforms.git
 theme:
   name: material
-  logo: assets/janus_bg.svg
+  logo: assets/rhdh_bg.svg
   favicon: assets/favicon.ico
   font:
     text: Red Hat Text
@@ -14,7 +14,7 @@ theme:
 
     # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
-      scheme: janus
+      scheme: rhdh
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
