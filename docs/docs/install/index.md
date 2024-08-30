@@ -113,23 +113,7 @@ export GITHUB_KEYCLOAK_CLIENT_SECRET=
 
 ![Get Client ID](assets/client-info.png)
 
-Create a **second** GitHub OAuth application to enable Dev Spaces to seamlessly push code changes to the repository for new components created in Backstage.  
-
-``` sh
-open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-dev-spaces&oauth_application[url]=https://devspaces.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://devspaces.apps$OPENSHIFT_CLUSTER_INFO/api/oauth/callback"
-```
-
-Set the `GITHUB_DEV_SPACES_CLIENT_ID` and `GITHUB_DEV_SPACES_CLIENT_SECRET` environment variables with the values from the OAuth application.
-
-``` sh
-export GITHUB_DEV_SPACES_CLIENT_ID=
-```
-
-``` sh
-export GITHUB_DEV_SPACES_CLIENT_SECRET=
-```
-
-Create a **third** GitHub OAuth application to enable the numerous Backstage plugins utilizing GitHub to authenticate and access the relevant data.
+Create a **second** GitHub OAuth application to enable the numerous Backstage plugins utilizing GitHub to authenticate and access the relevant data.
 
 ``` sh
 open "https://github.com/settings/applications/new?oauth_application[name]=$GITHUB_ORGANIZATION-backstage&oauth_application[url]=https://rhdh-demo.apps$OPENSHIFT_CLUSTER_INFO&oauth_application[callback_url]=https://rhdh-demo.apps$OPENSHIFT_CLUSTER_INFO/api/auth/github/handler/frame"

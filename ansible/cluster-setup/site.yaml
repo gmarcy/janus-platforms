@@ -94,17 +94,6 @@
   - name: Extract Vault Token
     set_fact:
       vault_token: "{{ vault_init.results[0].resources[0].data.root_token | b64decode }}"
-  - name: Populate Vault with Dev Spaces Secrets
-    with_items: "{{ env }}"
-    community.hashi_vault.vault_write:
-      url: "https://vault-vault.apps{{ cluster_host }}"
-      path: kv/{{ item.rhdhinstancename }}/dev-spaces
-      validate_certs: false
-      data:
-        id: "{{ lookup('ansible.builtin.env', 'GITHUB_DEV_SPACES_CLIENT_ID') }}"
-        secret: "{{ lookup('ansible.builtin.env', 'GITHUB_DEV_SPACES_CLIENT_SECRET') }}"
-      token: "{{ vault_token }}"
-    register: vault_status
   - name: Populate Vault with Github Credentials
     with_items: "{{ env }}"
     community.hashi_vault.vault_write:
@@ -400,7 +389,7 @@
           enabled: false
         techdocs:
           enabled: true
-      create_namespace: true
+      #create_namespace: true
 - name: Install Console links
   hosts: 'localhost'
   tasks:
